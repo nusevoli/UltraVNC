@@ -53,6 +53,8 @@ extern "C" {
 				ULONG Offset);
 }
 
+#include "TLSInternal.h"
+
 // Socket implementation
 
 // Create one or more VSocketSystem objects per application
@@ -334,6 +336,8 @@ protected:
 
   bool							GetOptimalSndBuf();
   unsigned int							G_SENDBUFFER;
+
+  TLSInternal* tls;
 };
 
 #endif // _ATT_VSOCKET_DEFINED

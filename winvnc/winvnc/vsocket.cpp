@@ -161,6 +161,8 @@ VSocket::VSocket()
 	m_fPluginStreamingIn = false;
 	m_fPluginStreamingOut = false;	
 	G_SENDBUFFER=G_SENDBUFFER_EX;
+
+	tls = new TLSInternal();
 }
 
 ////////////////////////////
@@ -171,6 +173,8 @@ VSocket::~VSocket()
   Close();
   if (m_pNetRectBuf != NULL)
  	delete [] m_pNetRectBuf;
+
+  delete tls;
 }
 
 ////////////////////////////////////////////////////////////////
