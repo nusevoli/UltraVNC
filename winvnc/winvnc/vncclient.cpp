@@ -1719,7 +1719,7 @@ BOOL vncClientThread::AuthSecureVNCPlugin_old(std::string& auth_message)
 BOOL 
 vncClientThread::AuthMsLogon(std::string& auth_message) 
 {
-	DH dh;
+	ultravnc::DH dh;
 	char gen[8], mod[8], pub[8], resp[8];
 	char user[256], passwd[64];
 	unsigned char key[8];

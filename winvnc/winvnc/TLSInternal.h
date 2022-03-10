@@ -2,19 +2,30 @@
 
 #include "vtypes.h"
 
-//#include <openssl/rsa.h>
-//#include <openssl/pem.h>
-//#include <openssl/err.h>
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+#include <openssl/ssl.h>
 
 class TLSInternal
 {
+	SSL_CTX* ctx;
+	SSL* ssl;
+	X509* client_cert;
+	SSL_METHOD* meth;
+
+public:
+	TLSInternal();
+	~TLSInternal();
+
+	// SSL_free (ssl);
+	VBool Close();
 /*
 	VBool Create();
 
 	// https://cpp.hotexamples.com/examples/-/-/SSL_shutdown/cpp-ssl_shutdown-function-examples.html
 	VBool Shutdown();
-	// SSL_free (ssl);
-	VBool Close();
+	
 	VBool Connect(const VString address, const VCard port);
 
 	VBool Listen();

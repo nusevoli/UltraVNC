@@ -23,6 +23,8 @@
 #include "dh.h"
 #include <tchar.h>
 
+using namespace ultravnc;
+
 class Except {
 private:
 	char *info;
