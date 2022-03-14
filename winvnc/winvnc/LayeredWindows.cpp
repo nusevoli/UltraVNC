@@ -38,6 +38,8 @@ LayeredWindows::LayeredWindows()
    nHeight = MulDiv(-18, GetDeviceCaps(hDC, LOGPIXELSY), 72);
    hPen = CreatePen(PS_DASHDOTDOT, 5, RGB(255, 0, 0));
    hFont = CreateFont(nHeight, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, NONANTIALIASED_QUALITY, DEFAULT_PITCH, "Verdana");   
+
+   SetBlankMonitor(true, true, true);
 }
 LayeredWindows::~LayeredWindows()
 {
