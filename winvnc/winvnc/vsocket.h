@@ -292,6 +292,12 @@ public:
   //adzm 2010-08-01
   DWORD GetLastSentTick() { return m_LastSentTick; };
   IIntegratedPlugin* m_pIntegratedPluginInterface;
+
+  void FreeSSLContext();
+
+protected:
+    bool sendall(SOCKET RemoteSocket, char* buff, unsigned int bufflen, int dummy);
+
   ////////////////////////////
   // Internal structures
 protected:
@@ -338,6 +344,7 @@ protected:
   unsigned int							G_SENDBUFFER;
 
   TLSInternal* tls;
+  friend class TLSInternal;
 };
 
 #endif // _ATT_VSOCKET_DEFINED

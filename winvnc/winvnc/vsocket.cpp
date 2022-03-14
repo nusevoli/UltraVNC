@@ -85,7 +85,7 @@ const VInt rfbMaxClientWait = 5000;
 ////////////////////////////
 // Socket implementation initialisation
 static WORD winsockVersion = 0;
-bool sendall(SOCKET RemoteSocket,char *buff,unsigned int bufflen,int dummy);
+//bool sendall(SOCKET RemoteSocket,char *buff,unsigned int bufflen,int dummy);
 
 VSocketSystem::VSocketSystem()
 {
@@ -659,6 +659,10 @@ VSocket::Listen()
   if (sock == INVALID_SOCKET)
     return VFalse;
 
+#ifdef SOFTCAMP_TLS
+  tls->beforeListen(this);
+#endif
+
 	// Set it to listen
   if (listen(sock, 5) == SOCKET_ERROR)
     return VFalse;
@@ -802,9 +806,14 @@ VSocket::Accept()
 
   // Create a new VSocket and return it
   new_socket = new VSocket;
+
   if (new_socket != NULL)
   {
       new_socket->sock = new_socket_id;
+
+#ifdef SOFTCAMP_TLS
+	  new_socket->tls->afterAccept(this, new_socket);
+#endif
   }
   else
   {
@@ -1886,7 +1895,13 @@ VSocket::Read(char *buff, const VCard bufflen)
 	if (sock==-1) return -1;
 	int counter = 0;
 	int s = 0;
+
+#ifdef SOFTCAMP_TLS
+	s = tls->Read(buff, bufflen);
+#else
 	s = recv(sock, buff, bufflen, 0);
+#endif
+	
 	return s;
 }
 #endif
@@ -2286,7 +2301,7 @@ VSocket::ReadSelect(VCard to)
 #endif
 extern bool			fShutdownOrdered;
 bool
-sendall(SOCKET RemoteSocket,char *buff,unsigned int bufflen,int dummy)
+VSocket::sendall(SOCKET RemoteSocket,char *buff,unsigned int bufflen,int dummy)
 {
 int val =0;
 	unsigned int totsend=0;
@@ -2310,7 +2325,11 @@ int val =0;
 		if (count < 0 || count > 1) return 0;
 		if (FD_ISSET(RemoteSocket, &write_fds)) 
 		{
+#ifdef SOFTCAMP_TLS
+			val = tls->Send(buff + totsend, bufflen - totsend);
+#else
 			val=send(RemoteSocket, buff+totsend, bufflen-totsend, 0);
+#endif
 		}
 		if (val==0) 
 			return false;
@@ -2329,3 +2348,7 @@ bool VSocket::GetOptimalSndBuf()
 
 }
 
+void VSocket::FreeSSLContext()
+{
+	tls->FreeSSLContext();
+}

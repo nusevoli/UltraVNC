@@ -7,25 +7,30 @@
 #include <openssl/err.h>
 #include <openssl/ssl.h>
 
+class VSocket;
+
 class TLSInternal
 {
 	SSL_CTX* ctx;
 	SSL* ssl;
-	X509* client_cert;
-	SSL_METHOD* meth;
+	const SSL_METHOD* meth;
 
 public:
 	TLSInternal();
-	~TLSInternal();
+	virtual ~TLSInternal();
 
-	// SSL_free (ssl);
+	void beforeListen(VSocket* sock);
+	void afterAccept(VSocket* listen, VSocket* client);
+
 	VBool Close();
-/*
-	VBool Create();
-
-	// https://cpp.hotexamples.com/examples/-/-/SSL_shutdown/cpp-ssl_shutdown-function-examples.html
 	VBool Shutdown();
-	
+
+	int Send(char* buf, unsigned int len);
+	int Read(char* buf, unsigned int len);
+
+	void FreeSSLContext();
+
+/*	
 	VBool Connect(const VString address, const VCard port);
 
 	VBool Listen();
@@ -34,61 +39,5 @@ public:
 
 
 
-	/*
-	*
-	* 골때림...
-VInt VSocket::Send(const char *buff, const VCard bufflen)
-->
-bool sendall(SOCKET RemoteSocket,char *buff,unsigned int bufflen,int dummy)
-
-
-
-VInt
-VSocket::SendQueued(const char *buff, const VCard bufflen)
-->
-sendall
-
-
-
-VBool
-VSocket::SendExact(const char *buff, const VCard bufflen, unsigned char msgType)
-->
-SendExact(buff, bufflen);
-
-
-
-VBool
-VSocket::SendExactQueue(const char *buff, const VCard bufflen, unsigned char msgType)
-->
-SendExactQueue(buff, bufflen);
-
-
-
-VBool
-VSocket::SendExact(const char *buff, const VCard bufflen)
-->
-Send(pBuffer, nBufflen);
-
-
-VBool
-VSocket::SendExactQueue(const char *buff, const VCard bufflen)
-->
-SendQueued(pBuffer, nBufflen);
-	*/
-
-
-/*
-* // Read만 잘 하면 될듯.
-	VInt Read(char* buff, const VCard bufflen);
-	VBool
-		VSocket::ReadExact(char* buff, const VCard bufflen)
-		-> 
-		Read(char* buff, const VCard bufflen)
-
-
-		VBool
-		VSocket::ReadSelect(VCard to)
-		=> vnchttpconnect.cpp에서 사용
-*/
 };
 

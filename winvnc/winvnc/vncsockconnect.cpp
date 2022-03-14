@@ -146,6 +146,10 @@ vncSockConnect::~vncSockConnect()
 
 	m_socket.Close();
     }
+
+#ifdef SOFTCAMP_TLS
+	m_socket.FreeSSLContext();
+#endif
 }
 
 BOOL vncSockConnect::Init(vncServer *server, UINT port)
