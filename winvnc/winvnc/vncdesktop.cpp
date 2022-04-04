@@ -1055,7 +1055,7 @@ vncDesktop::InitBitmap()
 
 	Checkmonitors();
 	requested_all_monitor = m_buffer.IsAllMonitors();
-    if (requested_all_monitor && nr_monitors > 1)
+    //if (requested_all_monitor && nr_monitors > 1)
     {
         show_all_monitors = true;
         m_current_monitor = MULTI_MON_ALL;
