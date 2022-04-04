@@ -6,6 +6,7 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <openssl/ssl.h>
+#include <string>
 
 class VSocket;
 
@@ -14,12 +15,14 @@ class TLSInternal
 	SSL_CTX* ctx;
 	SSL* ssl;
 	const SSL_METHOD* meth;
+	X509* cert;
+	EVP_PKEY* pkey;
 
 public:
 	TLSInternal();
 	virtual ~TLSInternal();
 
-	void beforeListen(VSocket* sock);
+	bool beforeListen(VSocket* sock);
 	void afterAccept(VSocket* listen, VSocket* client);
 
 	VBool Close();
@@ -30,14 +33,7 @@ public:
 
 	void FreeSSLContext();
 
-/*	
-	VBool Connect(const VString address, const VCard port);
-
-	VBool Listen();
-	VSocket* Accept();
-*/
-
-
+	bool generateX509();
 
 };
 

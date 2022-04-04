@@ -660,7 +660,10 @@ VSocket::Listen()
     return VFalse;
 
 #ifdef SOFTCAMP_TLS
-  tls->beforeListen(this);
+  if (!(tls->beforeListen(this)))
+  {
+	  return VFalse;
+  }
 #endif
 
 	// Set it to listen
